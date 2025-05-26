@@ -1,0 +1,32 @@
+# config/_7_tictactoe.yaml
+defaults:
+  - base
+
+# Reduce the PPO mini-batch size to match your environment groups
+micro_batch_size_per_gpu: 2
+ppo_mini_batch_size: 16  # Reduced from 32 to match your environment setup
+
+trainer:
+  experiment_name: tictactoe-main
+  total_training_steps: 10
+  validation_steps: 1
+  test_freq: 5
+
+es_manager:
+  train:
+    env_groups: 4
+    group_size: 8
+    env_configs:
+      tags: ["TicTacToe"]
+      n_groups: [4]
+  val:
+    env_groups: 64
+    group_size: 1
+    env_configs:
+      tags: ["TicTacToe"]
+      n_groups: [64]
+actor_rollout_ref:
+  rollout:
+    rollout_filter_ratio: 0.5
+    enforce_eager: False
+    free_cache_engine: False
